@@ -15,20 +15,21 @@ app.use (session({
     cookie:{secure:false}
 }))
 
-app.get('/inicio',(req, res)=>{
+app.get('/inicio',(req, res)=>{    
     
-    req.session.destroy((err)=>{
-        if (err){
-            console.error("Error destroying session:", err);
-            res.status(500).send("Error destroying session");
-        }else{
-            res.send("Session destroyed");
-        }
-    }
-);
+    if(req.session.usuariuo){
+        res.send(`Bienvenido${req.session.usuario}al panel`)
+    }else{
+        res.status(401).send ('No tienes sesion activa')
+    }   
     
 });
 
-app.listen(3000, ()=> {
-    console.log("Server is running on port 3000");
-});
+app.post('login',(req,res)=>{
+    const {usuario, password}=req.body
+    if(usuario=='admin'&& password ==='1234'){
+        res.send('Inicio de sesion correcto')
+    }else{
+        res.status(401).send('Credenciales incorrectas')
+    }
+})
